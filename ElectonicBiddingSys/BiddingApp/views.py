@@ -4,8 +4,6 @@ from datetime import timedelta
 from django.db import OperationalError
 from django.shortcuts import redirect, render
 from django.db import connection
-from .models import User, Image, Jewelry, Watchlist, Bid
-from .forms import RegistrationForm, JewelryForm, ImageForm, BidForm
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django import forms
@@ -31,6 +29,21 @@ openAIDescription = "This is sql, and table name is 空的, the coulum name is i
                     "user_id_id, date_created"
 
 # Create your models here.
+def dashboard(request):
+    return render(request, 'homepage_start.html')
+def executeSQLQuery(sql_query):
+    if not sql_query:
+        print("SQL Query is null or empty")
+        raise ValueError("SQL query must be a non-empty string")
+
+    with connection.cursor() as cursor:
+        cursor.execute(sql_query)
+        results = cursor.fetchall()
+
+    print(results)
+    # for p in Jewelry.objects.raw(sql_query):
+    #     results.append(p)
+    return results
 def chatbot(request):
     chatbot_response = None
     print("test")
@@ -118,6 +131,4 @@ def chatbot(request):
         return render(request, 'chatbox.html', {})
     
 
-    def dashboard(request):
-        return render(request,'homepage_start.html')
 

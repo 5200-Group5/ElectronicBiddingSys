@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sidebar with Redirect Buttons</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #333; /* Dark gray background */
+            color: white;
+        }
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #444; /* Slightly lighter gray for the sidebar */
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 16px;
+            text-decoration: none;
+            width: 100%;
+            border: none;
+            background: none;
+            text-align: left;
+        }
+        .sidebar a:hover {
+            background-color: #555; /* Lighter gray for hover effect */
+        }
+        .content {
+            margin-left: 200px; /* Same as the width of the sidebar */
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="">signIn</a>
+    <a href="">signOut</a>
+    <a href="chatbot">search</a>
+    <a href="yourAccountLink.html">account</a>
+</div>
+
+<div class="content">
+    <h2> Biding System</h2>
+    {% block content %}
+    <!-- 默认内容，如果没有被覆盖的话会显示这里的内容 -->
+    {% endblock %}
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends "homepage.html" %}
+
+{% block content %}
+
+
+<div style="text-align: center; margin-top: 20px;">
+    <h3>
+        Search everything in this bidding app you want
+    </h3>
+    <form method="post" style="display: inline-block; margin-top: 20px;">
+        {% csrf_token %}
+        <input type="text" class="form-control" name="user_input" style="margin-bottom: 10px;">
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </form>
+</div>
+
+<div style="text-align: center; margin-top: 20px;">
+    {% for data in chatbox_data %}
+        <p>{{ data }}</p>
+    {% endfor %}
+</div>
+{% endblock %}
