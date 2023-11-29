@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "BiddingApp"
 ]
 
 MIDDLEWARE = [
@@ -75,12 +76,12 @@ WSGI_APPLICATION = "ElectonicBiddingSys.wsgi.application"
 
 DATABASES = {
     'default': {
-'ENGINE': 'django.db.backends.mysql',
-'NAME': 'group5',
-'USER': 'root',
-'PASSWORD': 'password',
-'HOST': '34.83.225.29',
-'PORT': '3306'
+    'ENGINE': 'django.db.backends.mysql',
+    'NAME': 'group5',
+    'USER': 'root',
+    'PASSWORD': 'password',
+    'HOST': '34.83.225.29',
+    'PORT': '3306'
 }
 }
 
