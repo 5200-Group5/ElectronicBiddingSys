@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8" />
+        <title>Bidding Page</title>
+        <link rel="stylesheet" href="{% static 'bidding/style.css' %}" />
+    </head>
+    <body>
+        <h1>Available Items for Bidding</h1>
+        <div class="item-list">
+            {% for item in items %}
+            <div class="item">
+                <h2>{{ item.name }}</h2>
+                <p>{{ item.description }}</p>
+                <p>Starting Bid: {{ item.starting_price }}</p>
+                <a href="{% url 'item_detail' item_id=item.item_id %}"
+                    >View Details</a
+                >
+            </div>
+            {% empty %}
+            <p>No items available for bidding at the moment.</p>
+            {% endfor %}
+        </div>
+    </body>
+</html>

@@ -16,7 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from bidding import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    # path("admin/", admin.site.urls),
+    path('bidding/', views.bidding_page, name='bidding_page'),
+    path('item_detail/<int:item_id>/', views.item_detail, name='item_detail'),
+    path('place_bid/<int:item_id>/', views.place_bid, name='place_bid'),
 ]

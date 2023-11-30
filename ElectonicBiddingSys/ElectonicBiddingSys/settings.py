@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "bidding",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,7 @@ WSGI_APPLICATION = "ElectonicBiddingSys.wsgi.application"
 DATABASES = {
     'default': {
 'ENGINE': 'django.db.backends.mysql',
-'NAME': 'group5',
+'NAME': 'ElectronicBiddingSys',
 'USER': 'root',
 'PASSWORD': 'password',
 'HOST': '34.83.225.29',
@@ -125,3 +126,4 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
