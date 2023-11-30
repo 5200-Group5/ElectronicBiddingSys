@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% comment %} <title>{% block title %}Your Title Here{% endblock %}</title> {% endcomment %}
+
+    <!-- Bootstrap CSS -->
+    <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "common.css" %}" rel="stylesheet">
+    {% comment %} {% block extra_css %}{% endblock %} {% endcomment %}
+</head>
+
+<body>
+
+{#    header   #}
+{% include "components/navbar.html" %}
+
+<main>
+    {% block content %}
+        <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+            <div class="col-md-5 p-lg-5 mx-auto my-5">
+                <h1 class="display-4 fw-normal"></h1>
+                <p class="lead fw-normal"></p>
+                <a class="btn btn-outline-secondary" href="#"></a>
+            </div>
+            <div class="product-device shadow-sm d-none d-md-block"></div>
+            <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+        </div>
+    {% endblock %}
+</main>
+</body>
+
+</html>

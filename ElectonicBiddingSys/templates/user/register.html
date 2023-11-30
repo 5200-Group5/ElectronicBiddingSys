@@ -1,0 +1,102 @@
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% comment %} <title>{% block title %}Your Title Here{% endblock %}</title> {% endcomment %}
+    
+        <!-- Bootstrap CSS -->
+        <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+        <link href="{% static "common.css" %}" rel="stylesheet">
+        {% block extra_css %}{% endblock %}
+    </head>
+    
+    <body>
+    
+    {#    header   #}
+    {% include "components/navbar.html" %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Register Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+    <style>
+        .form-container {
+            margin-top: 100px;
+        }
+
+        .auth-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 450px;
+        }
+
+        .auth-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-login {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+
+        .btn-login:hover {
+            background-color: #333;
+            color: #fff;
+        }
+        .asteriskField {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4 form-container">
+            <form class="auth-form" method="post" action="{% url "user:register" %}">{% csrf_token %}
+                <h2>Register</h2>
+                {{ form|crispy }}
+                <div class="d-grid gap-1">
+                    <button type="submit" class="btn btn-login btn-block">Register</button>
+                </div>
+                <div style="margin-bottom: 10px">
+                    <a href="{% url "user:login" %}" class="btn btn-login">Login</a>
+                    <a href="{% url "user:home" %}" class="btn btn-login">Home</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% comment %} 
+<script>
+    var inputs = document.getElementsByTagName('input');
+
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].hasAttribute('required')) {
+            inputs[i].removeAttribute('required');
+        }
+    }
+</script>  {% endcomment %}
+<script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+
+</body>
+</html>

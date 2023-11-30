@@ -10,7 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+
 from pathlib import Path
+import pymysql # noqa: 402
+pymysql.version_info = (1, 4, 6, 'final', 0) # change mysqlclient version
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -74,16 +78,27 @@ WSGI_APPLICATION = "ElectonicBiddingSys.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'group5',
-    'USER': 'root',
-    'PASSWORD': 'password',
-    'HOST': '34.83.225.29',
-    'PORT': '3306'
-}
-}
+if os.getenv('GAE_APPLICATION', None):
+    DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '/cloudsql/lab3-002728650:us-west1:neu-test-db',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'NAME':'group5'
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'group5',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'HOST': '34.83.225.29',
+        'PORT': '3306'
+        }
+    }
 
 
 # Password validation
