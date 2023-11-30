@@ -12,9 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 
 from pathlib import Path
-import pymysql # noqa: 402
-pymysql.version_info = (1, 4, 6, 'final', 0) # change mysqlclient version
-pymysql.install_as_MySQLdb()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +39,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "BiddingApp"
+    # packages
+    "crispy_forms",
+    "crispy_bootstrap5",
+    'django_filters',
+
+    # apps
+    "BiddingApp",
+    "user"
 ]
 
 MIDDLEWARE = [
@@ -78,27 +83,16 @@ WSGI_APPLICATION = "ElectonicBiddingSys.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if os.getenv('GAE_APPLICATION', None):
-    DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': '/cloudsql/lab3-002728650:us-west1:neu-test-db',
-        'USER': 'root',
-        'PASSWORD': 'password',
-        'NAME':'group5'
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'group5',
-        'USER': 'root',
-        'PASSWORD': 'password',
-        'HOST': '34.83.225.29',
-        'PORT': '3306'
-        }
-    }
+DATABASES = {
+    'default': {
+    'ENGINE': 'django.db.backends.mysql',
+    'NAME': 'group5',
+    'USER': 'root',
+    'PASSWORD': 'password',
+    'HOST': '34.83.225.29',
+    'PORT': '3306'
+}
+}
 
 
 # Password validation
@@ -136,9 +130,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = BASE_DIR / "static",
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+# Login
+LOGIN_URL = "user:login"
+LOGOUT_URL = "user:logout"
 LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "user:login"

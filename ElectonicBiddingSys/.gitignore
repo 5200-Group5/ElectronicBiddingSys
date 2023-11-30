@@ -1,1 +1,7 @@
 dbenv/
+venv
+.idea
+/migrations
+__pycache__/
+*.pyc
+media
