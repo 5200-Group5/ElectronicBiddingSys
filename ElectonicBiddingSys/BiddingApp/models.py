@@ -100,6 +100,7 @@ class Category(models.Model):
 #         verbose_name_plural = "items"
 
 class Item(models.Model):
+    name = models.CharField(max_length=255, null=False) #RL ADD
     item_id = models.AutoField(primary_key=True, db_column='ItemID')  # Ensure this matches your database column name for the primary key
     description = models.TextField()
     picture = models.CharField(max_length=255, blank=True, null=True)  # Assuming a file path is stored

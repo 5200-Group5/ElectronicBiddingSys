@@ -49,7 +49,7 @@ from django.shortcuts import render
 from django_filters.views import FilterView
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
-from openai import OpenAI
+# from openai import OpenAI
 from .models import Category, Item
 from django.db import connection
 
