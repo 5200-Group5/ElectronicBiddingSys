@@ -5,8 +5,13 @@
         <meta charset="UTF-8" />
         <title>{{ item.name }}</title>
         <link rel="stylesheet" href="{% static 'item_detail.css' %}" />
+        
     </head>
     <body>
+        <div class="navbar-container">
+            <!-- Existing navbar content goes here -->
+            {% include 'components/navbar.html' %}
+        </div>
         <div class="item-container">
             <h1>{{ item.name }}</h1>
             <img src="{{ item.image_url }}" alt="{{ item.name }}" />

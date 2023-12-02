@@ -130,7 +130,7 @@ def place_bid(request, item_id):
     # If not a POST request, redirect to item detail page or show an error
     return redirect(reverse('item_detail', args=[item_id]))
 
-api_key = "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"
+api_key = " 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"
 openAIDescription = "This is sql, and table name is Item, the coulum name is ItemID, Description, Picture, Category(it contains two type 'Antiques' and 'Electronics'), " \
                     "Cond(it contains two type Used and New), Starting_price, End_date,Start_date " \
                     "user_id_id, date_created"
