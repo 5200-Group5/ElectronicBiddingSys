@@ -46,7 +46,9 @@ INSTALLED_APPS = [
 
     # apps
     "BiddingApp",
-    "user"
+    "user",
+    "account",
+    
 ]
 
 MIDDLEWARE = [

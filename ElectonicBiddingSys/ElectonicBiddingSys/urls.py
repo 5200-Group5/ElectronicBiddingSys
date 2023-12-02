@@ -25,6 +25,7 @@ urlpatterns = [
 
     path("user/", include("user.urls")),
     path("BiddingApp/", include("BiddingApp.urls")),
+    path("account/", include("account.urls")),
 
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
 ]
