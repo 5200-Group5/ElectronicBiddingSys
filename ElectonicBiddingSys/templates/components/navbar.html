@@ -13,6 +13,7 @@
             <a class="py-2 d-none d-md-inline-block" href="{% url "BiddingApp:item_list" %}">Search</a>
             <a class="py-2 d-none d-md-inline-block" href="{% url 'bidding:bidding_page' %}">Bidding</a>
             <a class="py-2 d-none d-md-inline-block" href="{% url "BiddingApp:chatbot" %}">Chatbot</a>
+            <a class="py-2 d-none d-md-inline-block" href="{% url "account:account" %}">My Account</a>
         </div>
         {% if not request.user.is_authenticated %}
             <a class="py-2 d-none d-md-inline-block" href="{% url "user:login" %}">Login</a>
