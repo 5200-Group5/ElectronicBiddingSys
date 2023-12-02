@@ -27,6 +27,8 @@ urlpatterns = [
     path("BiddingApp/", include("BiddingApp.urls")),
 
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
+
+    path('bidding/', include(('BiddingApp.urls', 'BiddingApp'), namespace='bidding')),
 ]
 
 

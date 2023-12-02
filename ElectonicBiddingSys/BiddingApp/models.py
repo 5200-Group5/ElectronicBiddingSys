@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import User  # Import Django's built-in user model
 # Create your models here.
 
 
@@ -84,16 +85,42 @@ class Category(models.Model):
         verbose_name_plural = "categories"
 
 
-class Item(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    description = models.TextField()
-    price = models.FloatField()
-    image = models.ImageField(upload_to="item_images")
+# class Item(models.Model):
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=50)
+#     description = models.TextField()
+#     price = models.FloatField()
+#     image = models.ImageField(upload_to="item_images")
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
+
+#     class Meta:
+#         verbose_name = "item"
+#         verbose_name_plural = "items"
+
+class Item(models.Model):
+    item_id = models.AutoField(primary_key=True, db_column='ItemID')  # Ensure this matches your database column name for the primary key
+    description = models.TextField()
+    picture = models.CharField(max_length=255, blank=True, null=True)  # Assuming a file path is stored
+    category = models.CharField(max_length=255)
+    condition = models.CharField(max_length=255, db_column='Cond')  # Align field name with SQL
+    starting_price = models.IntegerField()
+    end_date = models.DateTimeField()
+    start_date = models.DateTimeField()
 
     class Meta:
-        verbose_name = "item"
-        verbose_name_plural = "items"
+        db_table = 'Item'  # Use the existing table name
+
+    def __str__(self):
+        return f"Item in {self.category} - {self.condition}"
+
+class Bid(models.Model):
+    bid_id = models.AutoField(primary_key=True, db_column='BidID')  # Explicit primary key
+    item = models.ForeignKey('Item', on_delete=models.CASCADE, db_column='ItemID')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='UserID')  # Reference to Django's User model
+    price = models.IntegerField(db_column='Price')
+    status = models.CharField(max_length=255, db_column='Status')
+
+    def __str__(self):
+        return f"Bid by {self.user.username} on {self.item.name}"

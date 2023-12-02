@@ -12,5 +12,8 @@ from . import views
 app_name = "BiddingApp"
 
 urlpatterns = [
-    path("itemlist/", views.ItemFilterView.as_view(), name="item_list")
+    path("itemlist/", views.ItemFilterView.as_view(), name="item_list"),
+    path('', views.bidding_page, name='bidding_page'),
+    path('item_detail/<int:item_id>/', views.item_detail, name='item_detail'),
+    path('place_bid/<int:item_id>/', views.place_bid, name='place_bid'),
 ]
