@@ -127,14 +127,19 @@ def place_bid(request, item_id):
     # This function might not be necessary
     pass
 
-api_key = " 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"
-openAIDescription = "This is sql, and table name is Item, the coulum name is ItemID, Description, Picture, Category(it contains two type 'Antiques' and 'Electronics'), " \
+api_key = " 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"
+openAIDescription = "This is sql database with 3 tables, and the first table name is Item, "\
+                    "the columns name are ItemID, Description,Picture,Category(two type 'Antiques' and 'Electronics')" \
                     "Cond(it contains two type Used and New), Starting_price, End_date,Start_date " \
-                    "user_id_id, date_created"
-# openAIDescription = "This is sql, and the table name is Item. The column names are ItemID, Description, Picture, Category, Cond (which stands for condition and can be 'New' or 'Used'), " \
-#                     "Starting_price (a numerical value), End_date and Start_date (dates in the format YYYY-MM-DD). And if I ask for the message may contains in column names,please show me on sql query,even if you don't know how to do, just return a SQL query base on this prompt"
-# # 导入所需的模块
+                    "The second table name is auth_user,the columns name are id,password,last_login,is_superuser,"\
+                    "username,first_name,last_name, email, is_staff, is_active, date_joined "\
+                    "The third table name is Bid, the columns name are BidID,ItemID,UserID,Price,Status"\
+                    "I will give you description of what I want to search from the database, and you should give me a "\
+                     "SQL query to find them."\
+
+
 from django.shortcuts import render
+from openai import OpenAI
 import json
 # 您的视图函数
 
@@ -158,7 +163,7 @@ def chatbot(request):
             functions=[
                 {
                     "name": "query_database",
-                    "description": "find" +user_input,
+                    "description": user_input,
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -173,7 +178,7 @@ def chatbot(request):
             ],
             function_call='none',
         )
-        # print(response)
+
         sql_message = response.choices[0].message.content
         print(sql_message)
         start_index = sql_message.find('{')
