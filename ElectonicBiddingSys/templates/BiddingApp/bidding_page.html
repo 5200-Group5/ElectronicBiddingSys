@@ -15,8 +15,9 @@
         <div class="item-list">
             {% for item in items %}
             <div class="item">
-                <h2>{{ item.name }}</h2>
-                <p>{{ item.description }}</p>
+                <h2>Item Name: {{ item.name }}</h2>
+                <p>Description: {{ item.description }}</p>
+                <p>Category: {{ item.category }}</p>
                 <p>Starting Bid: {{ item.starting_price }}</p>
                 <!-- Update the URL tag with the namespace -->
                 <a href="{% url 'bidding:item_detail' item_id=item.item_id %}"

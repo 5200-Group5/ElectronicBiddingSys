@@ -98,37 +98,34 @@ def bidding_page(request):
 
 def item_detail(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
-    print(f"Debug: item.id = {item.item_id}")  # Add this line for debugging
-    return render(request, 'BiddingApp/item_detail.html', {'item': item})
+    bids = item.bid_set.all().order_by('-price')  # Corrected to 'price'
 
-def place_bid(request, item_id):
-    item = get_object_or_404(Item, pk=item_id)
-
-    if request.method == 'POST':
-        bid_amount = request.POST.get('bid_amount', None)
+    if request.method == 'POST' and request.user.is_authenticated:
+        bid_price = request.POST.get('bid_price', None)
         
-        # Convert bid_amount to the appropriate data type (e.g., Decimal)
-        # and validate (ensure it's greater than the starting price and higher than the current highest bid)
         try:
-            bid_amount = Decimal(bid_amount)
+            bid_price = Decimal(bid_price)
         except (TypeError, InvalidOperation):
-            return HttpResponse("Invalid bid amount", status=400)
+            return HttpResponse("Invalid bid price", status=400)
 
-        if bid_amount < item.starting_price:
+        if bid_price <= item.starting_price:
             return HttpResponse("Bid must be higher than starting price", status=400)
 
-        # Check if bid is higher than the current highest bid (if applicable)
-        # ...
+        highest_bid = bids.first()
+        if highest_bid and bid_price <= highest_bid.price:
+            return HttpResponse("There is already a higher bid.", status=400)
 
-        # Create and save the bid
-        bid = Bid(item=item, user=request.user, amount=bid_amount)
+        bid = Bid(item=item, user=request.user, price=bid_price)
         bid.save()
 
-        # Redirect to item detail page or another success page
-        return redirect(reverse('item_detail', args=[item_id]))
+        return redirect(reverse('bidding:item_detail', args=[item_id]))
 
-    # If not a POST request, redirect to item detail page or show an error
-    return redirect(reverse('item_detail', args=[item_id]))
+    return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids})
+
+@login_required
+def place_bid(request, item_id):
+    # This function might not be necessary
+    pass
 
 api_key = " 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"
 openAIDescription = "This is sql, and table name is Item, the coulum name is ItemID, Description, Picture, Category(it contains two type 'Antiques' and 'Electronics'), " \
