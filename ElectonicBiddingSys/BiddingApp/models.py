@@ -100,7 +100,7 @@ class Category(models.Model):
 #         verbose_name_plural = "items"
 
 class Item(models.Model):
-    name = models.CharField(max_length=255) #RL ADD
+    name = models.CharField(max_length=255, default="Default Name") #RL ADD
     item_id = models.AutoField(primary_key=True, db_column='ItemID')  # Ensure this matches your database column name for the primary key
     description = models.TextField()
     picture = models.CharField(max_length=255, blank=True, null=True)  # Assuming a file path is stored
@@ -122,6 +122,9 @@ class Bid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='UserID')  # Reference to Django's User model
     price = models.IntegerField(db_column='Price')
     status = models.CharField(max_length=255, db_column='Status')
+
+    class Meta:
+        db_table = 'Bid'
 
     def __str__(self):
         return f"Bid by {self.user.username} on {self.item.name}"
