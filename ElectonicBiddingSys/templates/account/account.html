@@ -14,6 +14,7 @@
       background-color: #f4f4f4;
   }
 
+
   .container1 {
       max-width: 600px;
       margin: 50px auto;
@@ -50,11 +51,18 @@
       color: #666;
   }
 
-  p {
-      margin: 0;
-      margin-bottom: 15px;
-      color: #333;
-  }
+  p[contenteditable="true"] {
+    display: inline-block;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 4px;
+    min-width: 150px;
+}
+
+p[contenteditable="true"]:focus {
+    outline: none;
+    border-color: #3498db;
+}
   </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,19 +90,23 @@
 
             <div class="info-item">
                 <label for="address">Address:</label>
-                <p id="address">123 Main Street, Cityville</p>
+                <p id="address" contenteditable="true">>123 Main Street, Cityville</p>
             </div>
 
             <div class="info-item">
                 <label for="phone">Phone Number:</label>
-                <p id="phone">123-456-7890</p>
+                <p id="phone" contenteditable="true">>123-456-7890</p>
             </div>
 
             <div class="info-item">
                 <label for="user-type">User Type:</label>
                 <p id="user-type">Buyer</p>
             </div>
+
+
+
         </div>
+        <a class="hs" href="{% url "account:history" %}">Item you Bought</a>
     </div>
 </body>
 </html>
