@@ -22,5 +22,5 @@ class UserLoginView(LoginView):
     template_name = "user/login.html"
 
 
-class UserLoginView(LoginView):
-    template_name = "user/login.html"
+# class UserLoginView(LoginView):
+#     template_name = "user/login.html"
