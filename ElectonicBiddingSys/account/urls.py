@@ -7,5 +7,7 @@ app_name = "account"
 
 urlpatterns = [
     path("", views.myview, name="account"),
+    path("history", views.history, name="history"),
 
 ]
+
