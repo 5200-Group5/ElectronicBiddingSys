@@ -90,10 +90,13 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal, InvalidOperation
+from .forms import ItemForm
 
 # Create your views here.
+@login_required
 def bidding_page(request):
     items = Item.objects.all()  # Get all items from the database
+    form = ItemForm()
     return render(request, 'BiddingApp/bidding_page.html', {'items': items})
 
 def item_detail(request, item_id):
@@ -127,9 +130,29 @@ def place_bid(request, item_id):
     # This function might not be necessary
     pass
 
+
+def create_item(request):
+    form = ItemForm()
+    return render(request, 'BiddingApp/create_item.html', {'form': form})
+
+def save_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)  # Include request.FILES if your form contains file uploads like images
+        if form.is_valid():
+            form.save()  # Save the new item to the database
+            return redirect('bidding:bidding_page')  # Redirect to bidding page or another appropriate page
+
+    else:
+        form = ItemForm()  # If not POST, create a blank form
+
+    return render(request, 'BiddingApp/create_item.html', {'form': form})
+
+
+
 api_key = " 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"
 openAIDescription = "This is sql database with 3 tables, and the first table name is Item, "\
                     "the columns name are ItemID, Description,Picture,Category(two type 'Antiques' and 'Electronics')" \
+
                     "Cond(it contains two type Used and New), Starting_price, End_date,Start_date " \
                     "The second table name is auth_user,the columns name are id,password,last_login,is_superuser,"\
                     "username,first_name,last_name, email, is_staff, is_active, date_joined "\

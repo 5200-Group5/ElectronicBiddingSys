@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Create New Item</title>
+    <!-- Include your CSS file here if needed -->
+    <link rel="stylesheet" href="{% static 'create_item.css' %}">
+</head>
+<body>
+    <h1>Create New Item</h1>
+    <a href="{% url 'bidding:bidding_page' %}" class="back-button">Back to Bidding Page</a>
+    <form method="post" action="{% url 'bidding:save_item' %}">
+        {% csrf_token %}
+        {{ form.as_p }} <!-- This will render the form fields -->
+        <!-- Add fields for item creation -->
+        <!-- <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea><br> -->
+        <!-- Add other fields as necessary -->
+        <button type="submit">Save Item</button>
+    </form>
+</body>
+</html>
