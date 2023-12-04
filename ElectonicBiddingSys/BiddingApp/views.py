@@ -152,7 +152,6 @@ def save_item(request):
 api_key = " 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"
 openAIDescription = "This is sql database with 3 tables, and the first table name is Item, "\
                     "the columns name are ItemID, Description,Picture,Category(two type 'Antiques' and 'Electronics')" \
-
                     "Cond(it contains two type Used and New), Starting_price, End_date,Start_date " \
                     "The second table name is auth_user,the columns name are id,password,last_login,is_superuser,"\
                     "username,first_name,last_name, email, is_staff, is_active, date_joined "\
