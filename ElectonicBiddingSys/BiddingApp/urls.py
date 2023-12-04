@@ -17,4 +17,6 @@ urlpatterns = [
     path('item_detail/<int:item_id>/', views.item_detail, name='item_detail'),
     path('place_bid/<int:item_id>/', views.place_bid, name='place_bid'),
     path("chatbot/", views.chatbot, name="chatbot"),
+    path('create_item/', views.create_item, name='create_item'),
+    path('save_item/', views.save_item, name='save_item'),
 ]

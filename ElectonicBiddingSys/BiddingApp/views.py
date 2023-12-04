@@ -90,10 +90,13 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal, InvalidOperation
+from .forms import ItemForm
 
 # Create your views here.
+@login_required
 def bidding_page(request):
     items = Item.objects.all()  # Get all items from the database
+    form = ItemForm()
     return render(request, 'BiddingApp/bidding_page.html', {'items': items})
 
 def item_detail(request, item_id):
@@ -126,6 +129,23 @@ def item_detail(request, item_id):
 def place_bid(request, item_id):
     # This function might not be necessary
     pass
+
+def create_item(request):
+    form = ItemForm()
+    return render(request, 'BiddingApp/create_item.html', {'form': form})
+
+def save_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)  # Include request.FILES if your form contains file uploads like images
+        if form.is_valid():
+            form.save()  # Save the new item to the database
+            return redirect('bidding:bidding_page')  # Redirect to bidding page or another appropriate page
+
+    else:
+        form = ItemForm()  # If not POST, create a blank form
+
+    return render(request, 'BiddingApp/create_item.html', {'form': form})
+
 
 api_key = " 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"
 openAIDescription = "This is sql, and table name is Item, the coulum name is ItemID, Description, Picture, Category(it contains two type 'Antiques' and 'Electronics'), " \
