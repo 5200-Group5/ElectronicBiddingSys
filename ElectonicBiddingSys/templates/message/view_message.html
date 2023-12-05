@@ -1,19 +1,52 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Received Messages</h2>
+  <div class="container">
+    <h2 class="mb-4">Received Messages</h2>
 
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>
-          <strong>From: {{ message.sender.username }}</strong><br>
-          {{ message.content }}<br>
-          <small>Sent at: {{ message.timestamp }}</small>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No messages received.</p>
-  {% endif %}
+    {% if messages %}
+      <div class="message-list">
+        {% for message in messages %}
+          <div class="message">
+            <div class="message-header">
+              <strong>From: {{ message.sender.username }}</strong>
+              <small class="text-muted">{{ message.timestamp|date:"F d, Y H:i:s" }}</small>
+            </div>
+            <div class="message-content">
+              {{ message.content }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-muted">No messages received.</p>
+    {% endif %}
+  </div>
+  <style>
+    .message-list {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .message {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .message-content {
+      font-size: 16px;
+    }
+
+    .text-muted {
+      color: #777;
+    }
+  </style>
 {% endblock %}
