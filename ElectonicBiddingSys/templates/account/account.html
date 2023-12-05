@@ -107,9 +107,9 @@ p[contenteditable="true"]:focus {
                 <label for="user-type">User Type:</label>
                 <p id="user-type">Buyer</p>
             </div>
-
-
-
+            <div>
+                <a href="{% url 'messaging:view_message' %}">View Messages</a>
+            </div>
         </div>
         <a class="hs" href="{% url "account:history" %}">Item you Bought</a>
     </div>

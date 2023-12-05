@@ -67,13 +67,12 @@ p[contenteditable="true"]:focus {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Information</title>
-</head>
 <body>
 
     <div class="container1">
         <button onclick="goBack()" class="back-button">Go Back</button>
         <h1>Account Information</h1>
-
+        <a href="{% url 'messaging:send_message' username=profile_user.username %}">Send Message</a>
         <div class="profile-photo">
             <img src="{% static "images/husky.jpeg" %}" alt="Profile Photo">
         </div>
@@ -98,9 +97,7 @@ p[contenteditable="true"]:focus {
                 <label for="phone">Phone Number:</label>
                 <p id="phone" contenteditable="true">>123-456-7890</p>
             </div>
-
-
-
+        
         </div>
     </div>
     <script>

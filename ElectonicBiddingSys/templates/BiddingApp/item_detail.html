@@ -31,6 +31,8 @@
             <img src="{{ item.image_url }}" alt="{{ item.name }}" />
             <p>{{ item.description }}</p>
             <p>Starting Bid: {{ item.starting_price }}</p>
+            <p>Start date: {{ item.start_date }}</p>
+            <p>End date: {{ item.end_date }}</p>
 
             <h2>Place Your Bid</h2>
             <form
@@ -48,7 +50,11 @@
                 />
                 <button type="submit">Place Bid</button>
             </form>
-
+            {% if error_message %}
+            <div class="alert alert-danger" role="alert">
+                {{ error_message }}
+            </div>
+            {% endif %}
             <h2>Current Bids</h2>
             <ul>
                 {% for bid in bids %}
@@ -58,6 +64,14 @@
                 {% empty %}
                 <li>No bids yet.</li>
                 {% endfor %}
+                
+                <h2>Winner:</h2>
+                {% if item.winner %}
+                <p>The winner is: {{ item.winner.username }}</p>
+                {% else %}
+                <p>No winner yet.</p>
+                {% endif %}
+
             </ul>
         </div>
     </body>

@@ -22,13 +22,11 @@ from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-
     path("user/", include("user.urls")),
     path("BiddingApp/", include("BiddingApp.urls")),
     path("account/", include("account.urls")),
-
+    path("message/", include("messaging.urls")),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
-
     path('bidding/', include(('BiddingApp.urls', 'BiddingApp'), namespace='bidding')),
 ]
 

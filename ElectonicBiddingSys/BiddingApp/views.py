@@ -50,12 +50,21 @@ from django_filters.views import FilterView
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 # from openai import OpenAI
-from .models import Category, Item
+from .models import Category, Item, Bid
 from django.db import connection
+from django.utils import timezone
 
 
 # Create your views here.
+def determine_winner(item_id):
+    item = Item.objects.get(pk=item_id)
+    if item.end_date <= timezone.now():
+        bids = Bid.objects.filter(item=item).order_by('-price')
 
+        if bids:
+            winning_bid = bids.first()
+            item.winner = winning_bid.user
+            item.save()
 
 class ItemFilterView(FilterView):
     model = Item
@@ -101,28 +110,33 @@ def bidding_page(request):
     return render(request, 'BiddingApp/bidding_page.html', {'items': items})
 
 def item_detail(request, item_id):
-    item = get_object_or_404(Item, pk=item_id)
-    bids = item.bid_set.all().order_by('-price')  # Corrected to 'price'
+    item = Item.objects.get(pk=item_id)
+    bids = Bid.objects.filter(item=item).order_by('-price')
 
-    if request.method == 'POST' and request.user.is_authenticated:
-        bid_price = request.POST.get('bid_price', None)
-        
+    if request.method == 'POST':
+        bid_price = request.POST.get('bid_price')
+
+        # Check if the end date has passed
+        if item.end_date <= timezone.now():
+            return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids, 'error_message': 'Bidding has ended.'})
+
+        # Validate the bid price
         try:
-            bid_price = Decimal(bid_price)
-        except (TypeError, InvalidOperation):
-            return HttpResponse("Invalid bid price", status=400)
+            bid_price = float(bid_price)
+        except ValueError:
+            return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids, 'error_message': 'Invalid bid amount.'})
 
-        if bid_price <= item.starting_price:
-            return HttpResponse("Bid must be higher than starting price", status=400)
+        if bid_price < item.starting_price:
+            return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids, 'error_message': 'Bid must be higher than the starting price.'})
 
-        highest_bid = bids.first()
-        if highest_bid and bid_price <= highest_bid.price:
-            return HttpResponse("There is already a higher bid.", status=400)
-
-        bid = Bid(item=item, user=request.user, price=bid_price)
+        # Create a new bid
+        bid = Bid(user=request.user, item=item, price=bid_price)
         bid.save()
 
-        return redirect(reverse('bidding:item_detail', args=[item_id]))
+        # Determine the winner
+        determine_winner(item)
+
+        return redirect('bidding:item_detail', item=item)
 
     return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids})
 
@@ -151,7 +165,6 @@ def save_item(request):
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
     return render(request, 'account/profile_account.html', {'profile_user': user})
-
 
 
 api_key = " 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"
@@ -253,3 +266,5 @@ def SQLQuery(sql_query):
         cursor.execute(sql_query)
         results = cursor.fetchall()
     return results
+
+

@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+from django.contrib import admin
 # from BiddingApp import views
 
 # urlpatterns = [
@@ -20,4 +21,5 @@ urlpatterns = [
     path('create_item/', views.create_item, name='create_item'),
     path('save_item/', views.save_item, name='save_item'),
     path('user/<str:username>/', views.user_profile, name='user_profile'),
+    path('messaging/', include('messaging.urls', namespace='messaging')), 
 ]

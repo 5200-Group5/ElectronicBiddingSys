@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Received Messages</h2>
+
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>
+          <strong>From: {{ message.sender.username }}</strong><br>
+          {{ message.content }}<br>
+          <small>Sent at: {{ message.timestamp }}</small>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No messages received.</p>
+  {% endif %}
+{% endblock %}
