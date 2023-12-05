@@ -91,6 +91,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal, InvalidOperation
 from .forms import ItemForm
+from django.contrib.auth.models import User  # Import Django's built-in user model
 
 # Create your views here.
 @login_required
@@ -146,6 +147,10 @@ def save_item(request):
         form = ItemForm()  # If not POST, create a blank form
 
     return render(request, 'BiddingApp/create_item.html', {'form': form})
+
+def user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, 'account/profile_account.html', {'profile_user': user})
 
 
 
