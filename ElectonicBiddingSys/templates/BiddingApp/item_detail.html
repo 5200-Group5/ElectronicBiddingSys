@@ -25,6 +25,8 @@
         </header>
 
         <div class="item-container">
+            <!-- Back Button -->
+            <a href="{% url 'bidding:bidding_page' %}" class="back-button">Back to Bidding Page</a>
             <h1>{{ item.name }}</h1>
             <img src="{{ item.image_url }}" alt="{{ item.name }}" />
             <p>{{ item.description }}</p>
@@ -50,7 +52,9 @@
             <h2>Current Bids</h2>
             <ul>
                 {% for bid in bids %}
-                <li>{{ bid.user.username }}: {{ bid.price }}</li>
+                <li>
+                    <a href="{% url 'bidding:user_profile' username=bid.user.username %}">{{ bid.user.username }}</a>: {{ bid.price }}
+                </li>
                 {% empty %}
                 <li>No bids yet.</li>
                 {% endfor %}

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     # apps
     "BiddingApp",
+    "account",
     "user"
 ]
 

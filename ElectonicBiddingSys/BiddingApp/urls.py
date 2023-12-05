@@ -19,4 +19,5 @@ urlpatterns = [
     path("chatbot/", views.chatbot, name="chatbot"),
     path('create_item/', views.create_item, name='create_item'),
     path('save_item/', views.save_item, name='save_item'),
+    path('user/<str:username>/', views.user_profile, name='user_profile'),
 ]
