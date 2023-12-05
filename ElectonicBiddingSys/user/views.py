@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import FormView
+from django.contrib.auth.decorators import login_required
+from django.views import View
+# from .models import Message
 
 from .forms import UserRegisterForm
 
@@ -24,3 +27,5 @@ class UserLoginView(LoginView):
 
 class UserLoginView(LoginView):
     template_name = "user/login.html"
+
+
