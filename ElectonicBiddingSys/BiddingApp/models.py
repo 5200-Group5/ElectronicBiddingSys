@@ -110,17 +110,14 @@ class Item(models.Model):
     starting_price = models.IntegerField()
     end_date = models.DateTimeField()
     start_date = models.DateTimeField()
-<<<<<<< HEAD
-    
-    
-=======
+
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
         related_name='created_items'
         # No null=True and blank=True, ensuring a creator is always specified
     )
->>>>>>> 9add62aba54ec08d6b34b74167e682a5755ee462
+
 
     class Meta:
         db_table = 'Item'  # Use the existing table name
