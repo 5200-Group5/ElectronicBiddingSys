@@ -184,7 +184,7 @@ def my_items(request):
         return redirect('user:login')
 
 
-api_key = "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"
+api_key = ""
 openAIDescription = "This is sql database with 3 tables, and the first table name is Item, "\
                     "the columns name are ItemID, Description,Picture,Category(two type 'Antiques' and 'Electronics')" \
                     "Cond(it contains two type Used and New), Starting_price, End_date,Start_date " \
