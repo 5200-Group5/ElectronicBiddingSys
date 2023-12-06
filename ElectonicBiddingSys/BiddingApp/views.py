@@ -49,7 +49,7 @@ from django.shortcuts import render
 from django_filters.views import FilterView
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
-# from openai import OpenAI
+from django.db.utils import OperationalError
 from .models import Category, Item, Bid
 from django.db import connection
 from django.utils import timezone
@@ -164,19 +164,28 @@ def filter_items(request):
 
 def save_item(request):
     if request.method == 'POST':
-        form = ItemForm(request.POST, request.FILES)  # Include request.FILES if your form contains file uploads like images
+        form = ItemForm(request.POST, request.FILES)  # Include request.FILES for file uploads
         if form.is_valid():
-            form.save()  # Save the new item to the database
-            return redirect('bidding:bidding_page')  # Redirect to bidding page or another appropriate page
-
+            item = form.save(commit=False)
+            item.creator = request.user
+            item.save()
+            return redirect('bidding:bidding_page')  # Redirect to an appropriate page
     else:
-        form = ItemForm()  # If not POST, create a blank form
+        form = ItemForm()
 
     return render(request, 'BiddingApp/create_item.html', {'form': form})
 
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
     return render(request, 'account/profile_account.html', {'profile_user': user})
+
+def my_items(request):
+    if request.user.is_authenticated:
+        user_items = Item.objects.filter(creator=request.user)
+        return render(request, 'BiddingApp/my_items.html', {'items': user_items})
+    else:
+        # Redirect to login page or show an error message if the user is not authenticated
+        return redirect('user:login')
 
 
 api_key = ""
@@ -230,7 +239,7 @@ def chatbot(request):
             ],
             function_call='none',
         )
-
+        sql_data = None
         sql_message = response.choices[0].message.content
         print(sql_message)
         start_index = sql_message.find('{')
@@ -249,25 +258,26 @@ def chatbot(request):
             except Exception as e:
                 print("wrong")
                 sql_data = ["Failed, GPT gives a wrong SQL query from your search"]
-                return render(request, 'chatbox.html', {'chatbox_data': sql_data})
+                return render(request, 'chatbox.html', {'sql_query':text,'chatbox_data': sql_data})
         else:
             print("no sql_json")
             sql_data = ["Failed, GPT didn't return a SQL query from your search"]
-            return render(request, 'chatbox.html', {'chatbox_data': sql_data})
+            return render(request, 'chatbox.html', {'sql_query':text,'chatbox_data': sql_data})
 
         sql = json_object["sql"]
+        text = str(sql)
         try:
             sql_data = SQLQuery(sql)
         except ValueError as ve:
-            print("fail")
+            print("fail ValueError")
         except OperationalError as e:
-            print("fail")
+            print("fail OperationalError")
         except Exception as e:
-            print("fail")
+            print("fail ")
 
         if not sql_data:
             sql_data = ["Noting found in database"]
-        return render(request, 'chatbox.html', {'chatbox_data': sql_data})
+        return render(request, 'chatbox.html', {'sql_query':text,'chatbox_data': sql_data})
     else:
         return render(request, 'chatbox.html', {})
 
