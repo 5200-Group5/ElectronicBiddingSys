@@ -160,19 +160,28 @@ def create_item(request):
 
 def save_item(request):
     if request.method == 'POST':
-        form = ItemForm(request.POST, request.FILES)  # Include request.FILES if your form contains file uploads like images
+        form = ItemForm(request.POST, request.FILES)  # Include request.FILES for file uploads
         if form.is_valid():
-            form.save()  # Save the new item to the database
-            return redirect('bidding:bidding_page')  # Redirect to bidding page or another appropriate page
-
+            item = form.save(commit=False)
+            item.creator = request.user
+            item.save()
+            return redirect('bidding:bidding_page')  # Redirect to an appropriate page
     else:
-        form = ItemForm()  # If not POST, create a blank form
+        form = ItemForm()
 
     return render(request, 'BiddingApp/create_item.html', {'form': form})
 
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
     return render(request, 'account/profile_account.html', {'profile_user': user})
+
+def my_items(request):
+    if request.user.is_authenticated:
+        user_items = Item.objects.filter(creator=request.user)
+        return render(request, 'BiddingApp/my_items.html', {'items': user_items})
+    else:
+        # Redirect to login page or show an error message if the user is not authenticated
+        return redirect('user:login')
 
 
 api_key = ""

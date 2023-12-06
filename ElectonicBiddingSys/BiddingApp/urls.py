@@ -22,4 +22,5 @@ urlpatterns = [
     path('save_item/', views.save_item, name='save_item'),
     path('user/<str:username>/', views.user_profile, name='user_profile'),
     path('messaging/', include('messaging.urls', namespace='messaging')), 
+    path('my_items/', views.my_items, name='my_items'),
 ]

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <title>My Items</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+<body>
+    <div class="navbar-container">
+        {% include 'components/navbar.html' %}
+    </div>
+    <h1>Items I've Created</h1>
+    <div class="item-list">
+        {% for item in items %}
+        <div class="item">
+            <h2>Item Name: {{ item.name }}</h2>
+            <p>Description: {{ item.description }}</p>
+            <p>Category: {{ item.category }}</p>
+            <p>Starting Price: {{ item.starting_price }}</p>
+            <p>Start date: {{ item.start_date }}</p>
+            <p>End date: {{ item.end_date }}</p>
+            <!-- Link to item detail page -->
+            <a href="{% url 'bidding:item_detail' item_id=item.item_id %}">View Details</a>
+        </div>
+        {% empty %}
+        <p>You have not created any items yet.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
