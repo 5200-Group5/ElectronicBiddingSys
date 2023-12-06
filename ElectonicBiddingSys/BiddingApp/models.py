@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User  # Import Django's built-in user model
+from django.conf import settings
 # Create your models here.
 
 
@@ -109,6 +110,12 @@ class Item(models.Model):
     starting_price = models.IntegerField()
     end_date = models.DateTimeField()
     start_date = models.DateTimeField()
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='created_items'
+        # No null=True and blank=True, ensuring a creator is always specified
+    )
 
     class Meta:
         db_table = 'Item'  # Use the existing table name
