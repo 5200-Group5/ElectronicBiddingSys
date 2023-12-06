@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from .models import Item, Bid
+from ...models import Item, Bid
 
 class Command(BaseCommand):
     help = 'Determine and update winners for items whose end times have passed.'

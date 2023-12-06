@@ -56,15 +56,6 @@ from django.utils import timezone
 
 
 # Create your views here.
-def determine_winner(item_id):
-    item = Item.objects.get(pk=item_id)
-    if item.end_date <= timezone.now():
-        bids = Bid.objects.filter(item=item).order_by('-price')
-
-        if bids:
-            winning_bid = bids.first()
-            item.winner = winning_bid.user
-            item.save()
 
 class ItemFilterView(FilterView):
     model = Item
@@ -104,6 +95,26 @@ from django.contrib.auth.models import User  # Import Django's built-in user mod
 
 # Create your views here.
 @login_required
+def determine_winner(item_id):
+    item = Item.objects.get(pk=item_id)
+    
+    # Check if the end date has passed
+    if item.end_date <= timezone.now():
+        highest_bid = Bid.objects.filter(item=item).order_by('-price').first()
+        
+        if highest_bid:
+            item.winner = highest_bid.user
+            item.save()
+        else:
+            # No bids were placed, so set the winner to None
+            item.winner = None
+            item.save()
+    else:
+        # Auction is still ongoing, no winner yet
+        item.winner = None
+        item.save()
+
+@login_required
 def bidding_page(request):
     items = Item.objects.all()  # Get all items from the database
     form = ItemForm()
@@ -113,14 +124,13 @@ def item_detail(request, item_id):
     item = Item.objects.get(pk=item_id)
     bids = Bid.objects.filter(item=item).order_by('-price')
 
+    current_time = timezone.now()
     if request.method == 'POST':
         bid_price = request.POST.get('bid_price')
 
-        # Check if the end date has passed
         if item.end_date <= timezone.now():
             return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids, 'error_message': 'Bidding has ended.'})
 
-        # Validate the bid price
         try:
             bid_price = float(bid_price)
         except ValueError:
@@ -129,16 +139,14 @@ def item_detail(request, item_id):
         if bid_price < item.starting_price:
             return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids, 'error_message': 'Bid must be higher than the starting price.'})
 
-        # Create a new bid
         bid = Bid(user=request.user, item=item, price=bid_price)
         bid.save()
 
-        # Determine the winner
         determine_winner(item)
 
-        return redirect('bidding:item_detail', item=item)
+        return redirect('bidding:item_detail', item=item, current_time=current_time)
 
-    return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids})
+    return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids, 'current_time': current_time})
 
 @login_required
 def place_bid(request, item_id):

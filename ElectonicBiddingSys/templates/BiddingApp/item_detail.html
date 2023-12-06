@@ -64,15 +64,13 @@
                 {% empty %}
                 <li>No bids yet.</li>
                 {% endfor %}
-                
-                <h2>Winner:</h2>
-                {% if item.winner %}
-                <p>The winner is: {{ item.winner.username }}</p>
-                {% else %}
-                <p>No winner yet.</p>
-                {% endif %}
-
             </ul>
+            <h2>Winner:</h2>
+            {% if item.end_date <= current_time and bids %}
+            <p>The winner is: {{ bids.0.user.username }}</p>
+            {% else %}
+            <p>No winner yet.</p>
+            {% endif %}
         </div>
     </body>
 </html>
