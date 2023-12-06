@@ -95,39 +95,27 @@ from django.contrib.auth.models import User  # Import Django's built-in user mod
 
 # Create your views here.
 @login_required
-def determine_winner(item_id):
-    item = Item.objects.get(pk=item_id)
-    
-    # Check if the end date has passed
+def determine_winner(item):
     if item.end_date <= timezone.now():
         highest_bid = Bid.objects.filter(item=item).order_by('-price').first()
-        
+
         if highest_bid:
             item.winner = highest_bid.user
-            item.save()
         else:
-            # No bids were placed, so set the winner to None
             item.winner = None
-            item.save()
+
+        item.save()
     else:
-        # Auction is still ongoing, no winner yet
         item.winner = None
         item.save()
 
 @login_required
-def bidding_page(request):
-    items = Item.objects.all()  # Get all items from the database
-    form = ItemForm()
-    return render(request, 'BiddingApp/bidding_page.html', {'items': items})
-
 def item_detail(request, item_id):
     item = Item.objects.get(pk=item_id)
     bids = Bid.objects.filter(item=item).order_by('-price')
-
     current_time = timezone.now()
     if request.method == 'POST':
         bid_price = request.POST.get('bid_price')
-
         if item.end_date <= timezone.now():
             return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids, 'error_message': 'Bidding has ended.'})
 
@@ -142,11 +130,15 @@ def item_detail(request, item_id):
         bid = Bid(user=request.user, item=item, price=bid_price)
         bid.save()
 
-        determine_winner(item)
-
-        return redirect('bidding:item_detail', item=item, current_time=current_time)
-
     return render(request, 'BiddingApp/item_detail.html', {'item': item, 'bids': bids, 'current_time': current_time})
+
+@login_required
+def bidding_page(request):
+    items = Item.objects.all()  # Get all items from the database
+    form = ItemForm()
+    return render(request, 'BiddingApp/bidding_page.html', {'items': items})
+
+
 
 @login_required
 def place_bid(request, item_id):
@@ -157,6 +149,18 @@ def place_bid(request, item_id):
 def create_item(request):
     form = ItemForm()
     return render(request, 'BiddingApp/create_item.html', {'form': form})
+
+def filter_items(request):
+    categories = Item.objects.values_list('category', flat=True).distinct()
+    category_selected = request.GET.get('category', '')
+    today = timezone.now()
+
+    if category_selected:
+        items = Item.objects.filter(category=category_selected, end_date__gte=today)
+    else:
+        items = Item.objects.filter(end_date__gte=today)
+
+    return render(request, 'BiddingApp/bidding_page.html', {'items': items, 'categories': categories})
 
 def save_item(request):
     if request.method == 'POST':

@@ -10,5 +10,7 @@ urlpatterns = [
     path("history", views.history, name="history"),
     path('create_report', views.create_report, name='create_report'),
     path('save_report', views.save_report, name='save_report'),
+    path('create_payment', views.create_payment, name='create_payment'),
+    path('save_payment', views.save_payment, name='save_payment'),
 ]
 

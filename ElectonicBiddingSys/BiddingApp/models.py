@@ -110,12 +110,14 @@ class Item(models.Model):
     starting_price = models.IntegerField()
     end_date = models.DateTimeField()
     start_date = models.DateTimeField()
+
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
         related_name='created_items'
         # No null=True and blank=True, ensuring a creator is always specified
     )
+
 
     class Meta:
         db_table = 'Item'  # Use the existing table name
@@ -136,6 +138,7 @@ class Bid(models.Model):
     def __str__(self):
         return f"Bid by {self.user.username} on {self.item.name}"
 
+
 import random
 from django.db import models
 from django.conf import settings
@@ -151,3 +154,6 @@ class ShippingLabel(models.Model):
 
     def __str__(self):
         return f"ShippingLabel for {self.item.name} - Tracking Number: {self.tracking_number}"
+
+    
+

@@ -6,8 +6,8 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest, HttpResponse
 from django.views.decorators.http import require_POST
-from .models import ReportedIssue
-from .forms import ReportForm
+from .models import ReportedIssue, transaction
+from .forms import ReportForm, PayForm
 
 
 @login_required
@@ -21,7 +21,7 @@ def myview(request):
 def history(request):
     id=request.user.id
     cursor = connection.cursor()
-    SQL='SELECT i.name, i.description, b.Price FROM Bid b JOIN Item i ON b.ItemId = i.ItemId WHERE b.userId ='+str(id)
+    SQL='SELECT distinct i.name, i.description, b.Price FROM Bid b JOIN Item i ON b.ItemId = i.ItemId WHERE b.userId ='+str(id)
                 # Execute SQL queries
     cursor.execute(SQL)
     result = cursor.fetchall()
@@ -46,4 +46,20 @@ def save_report(request):
     else:
         form = ReportForm()  # If not POST, create a blank form
 
-    return render(request, 'account/create_report.html', {'form': form})            
+    return render(request, 'account/create_report.html', {'form': form})
+
+def create_payment(request):
+    form = PayForm()
+    return render(request, 'account/create_payment.html', {'form': form})
+
+def save_payment(request):
+    if request.method == 'POST':
+        form = PayForm(request.POST, request.FILES)  # Include request.FILES if your form contains file uploads like images
+        if form.is_valid():
+            form.save()  # Save the new item to the database
+            return redirect('account:history')  
+    else:
+        form = PayForm()  # If not POST, create a blank form
+
+    return render(request, 'account/create_payment.html', {'form': form})            
+

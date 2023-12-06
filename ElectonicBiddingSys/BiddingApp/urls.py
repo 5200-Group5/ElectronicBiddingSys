@@ -22,6 +22,9 @@ urlpatterns = [
     path('save_item/', views.save_item, name='save_item'),
     path('user/<str:username>/', views.user_profile, name='user_profile'),
     path('messaging/', include('messaging.urls', namespace='messaging')), 
+
+    path('filter-items/', views.filter_items, name='filter_items'),
+
     path('my_items/', views.my_items, name='my_items'),
     path('create_shipping_label/<int:item_id>/', views.create_shipping_label, name='create_shipping_label'),
 ]
