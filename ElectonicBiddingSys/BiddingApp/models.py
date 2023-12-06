@@ -109,6 +109,8 @@ class Item(models.Model):
     starting_price = models.IntegerField()
     end_date = models.DateTimeField()
     start_date = models.DateTimeField()
+    
+    
 
     class Meta:
         db_table = 'Item'  # Use the existing table name
