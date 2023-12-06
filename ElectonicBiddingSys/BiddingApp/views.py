@@ -49,7 +49,7 @@ from django.shortcuts import render
 from django_filters.views import FilterView
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
-# from openai import OpenAI
+from django.db.utils import OperationalError
 from .models import Category, Item, Bid
 from django.db import connection
 from django.utils import timezone
@@ -184,7 +184,7 @@ def my_items(request):
         return redirect('user:login')
 
 
-api_key = ""
+api_key = "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"
 openAIDescription = "This is sql database with 3 tables, and the first table name is Item, "\
                     "the columns name are ItemID, Description,Picture,Category(two type 'Antiques' and 'Electronics')" \
                     "Cond(it contains two type Used and New), Starting_price, End_date,Start_date " \
@@ -235,7 +235,7 @@ def chatbot(request):
             ],
             function_call='none',
         )
-
+        sql_data = None
         sql_message = response.choices[0].message.content
         print(sql_message)
         start_index = sql_message.find('{')
@@ -254,25 +254,26 @@ def chatbot(request):
             except Exception as e:
                 print("wrong")
                 sql_data = ["Failed, GPT gives a wrong SQL query from your search"]
-                return render(request, 'chatbox.html', {'chatbox_data': sql_data})
+                return render(request, 'chatbox.html', {'sql_query':text,'chatbox_data': sql_data})
         else:
             print("no sql_json")
             sql_data = ["Failed, GPT didn't return a SQL query from your search"]
-            return render(request, 'chatbox.html', {'chatbox_data': sql_data})
+            return render(request, 'chatbox.html', {'sql_query':text,'chatbox_data': sql_data})
 
         sql = json_object["sql"]
+        text = str(sql)
         try:
             sql_data = SQLQuery(sql)
         except ValueError as ve:
-            print("fail")
+            print("fail ValueError")
         except OperationalError as e:
-            print("fail")
+            print("fail OperationalError")
         except Exception as e:
-            print("fail")
+            print("fail ")
 
         if not sql_data:
             sql_data = ["Noting found in database"]
-        return render(request, 'chatbox.html', {'chatbox_data': sql_data})
+        return render(request, 'chatbox.html', {'sql_query':text,'chatbox_data': sql_data})
     else:
         return render(request, 'chatbox.html', {})
 
