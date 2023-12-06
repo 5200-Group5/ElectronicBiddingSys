@@ -26,5 +26,5 @@ urlpatterns = [
     path('filter-items/', views.filter_items, name='filter_items'),
 
     path('my_items/', views.my_items, name='my_items'),
-
+    path('create_shipping_label/<int:item_id>/', views.create_shipping_label, name='create_shipping_label'),
 ]

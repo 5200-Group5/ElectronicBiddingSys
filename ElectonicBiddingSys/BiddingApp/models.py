@@ -138,4 +138,22 @@ class Bid(models.Model):
     def __str__(self):
         return f"Bid by {self.user.username} on {self.item.name}"
 
+
+import random
+from django.db import models
+from django.conf import settings
+
+def generate_tracking_number():
+    return ''.join([str(random.randint(0, 9)) for _ in range(10)])
+
+class ShippingLabel(models.Model):
+    tracking_number = models.CharField(max_length=10, default=generate_tracking_number, unique=True)
+    winner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='won_items')
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_labels')
+    item = models.ForeignKey('Item', on_delete=models.CASCADE, related_name='shipping_labels')
+
+    def __str__(self):
+        return f"ShippingLabel for {self.item.name} - Tracking Number: {self.tracking_number}"
+
     
+
