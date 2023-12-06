@@ -175,13 +175,34 @@ def user_profile(request, username):
     user = get_object_or_404(User, username=username)
     return render(request, 'account/profile_account.html', {'profile_user': user})
 
+
+from django.utils import timezone
 def my_items(request):
     if request.user.is_authenticated:
         user_items = Item.objects.filter(creator=request.user)
+        # Adding a new field to each item for checking if the end date has passed
+        for item in user_items:
+            item.has_ended = item.end_date < timezone.now()
         return render(request, 'BiddingApp/my_items.html', {'items': user_items})
     else:
         # Redirect to login page or show an error message if the user is not authenticated
         return redirect('user:login')
+    
+from .models import Item, ShippingLabel
+
+def create_shipping_label(request, item_id):
+    if request.method == 'POST':
+        item = get_object_or_404(Item, pk=item_id)
+        highest_bid = item.bid_set.order_by('-price').first()
+
+        if highest_bid:
+            ShippingLabel.objects.create(
+                winner=highest_bid.user,
+                creator=item.creator,
+                item=item
+            )
+
+    return render(request, 'BiddingApp/my_items.html')
 
 
 api_key = ""
