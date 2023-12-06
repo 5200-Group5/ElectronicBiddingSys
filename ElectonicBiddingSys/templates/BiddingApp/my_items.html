@@ -28,11 +28,15 @@
                 <!-- New buttons for ended auctions -->
                 {% if item.has_ended %}
                 <button class="done-button">Finished</button>
-                <a
-                    href="{% url 'bidding:create_shipping_label' item_id=item.item_id %}"
-                    class="shipping-label-button"
-                    >Create Shipping Label</a
+                <form
+                    method="post"
+                    action="{% url 'bidding:create_shipping_label' item_id=item.item_id %}"
                 >
+                    {% csrf_token %}
+                    <button type="submit" class="shipping-label-button">
+                        Create Shipping Label
+                    </button>
+                </form>
                 {% endif %}
             </div>
             {% empty %}

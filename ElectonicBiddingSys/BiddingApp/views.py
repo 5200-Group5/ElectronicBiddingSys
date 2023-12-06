@@ -189,20 +189,23 @@ def my_items(request):
         return redirect('user:login')
     
 from .models import Item, ShippingLabel
+from django.contrib import messages
 
 def create_shipping_label(request, item_id):
-    if request.method == 'POST':
-        item = get_object_or_404(Item, pk=item_id)
-        highest_bid = item.bid_set.order_by('-price').first()
+    item = get_object_or_404(Item, pk=item_id)
+    highest_bid = item.bid_set.order_by('-price').first()
 
-        if highest_bid:
-            ShippingLabel.objects.create(
-                winner=highest_bid.user,
-                creator=item.creator,
-                item=item
-            )
+    if highest_bid:
+        ShippingLabel.objects.create(
+            winner=highest_bid.user,
+            creator=item.creator,
+            item=item
+        )
+        messages.success(request, "Shipping label created successfully.")
+    else:
+        messages.error(request, "No bids found for the item.")
 
-    return render(request, 'BiddingApp/my_items.html')
+    return redirect('bidding:my_items')
 
 
 api_key = ""
