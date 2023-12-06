@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Create New Payment</title>
+    <!-- Include your CSS file here if needed -->
+    <link rel="stylesheet" href="{% static 'create_item.css' %}">
+</head>
+<body>
+    <h1>Create New Payment</h1>
+    <a href="{% url 'account:history' %}" class="back-button">Back</a>
+    <form method="post" action="{% url 'account:save_payment' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Payment</button>
+    </form>
+</body>
+</html>

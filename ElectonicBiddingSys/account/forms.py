@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import ReportedIssue
+from .models import ReportedIssue, transaction
 
 # class UserCreationForm(UserCreationForm):
 #     first_name = forms.CharField(max_length=30, required=True)
@@ -15,3 +15,8 @@ class ReportForm(forms.ModelForm):
     class Meta:
         model = ReportedIssue
         fields = ['message']
+
+class PayForm(forms.ModelForm):
+    class Meta:
+        model = transaction
+        fields = ['transaction_type','transaction_status']
