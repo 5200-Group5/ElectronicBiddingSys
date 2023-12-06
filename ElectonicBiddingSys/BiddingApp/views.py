@@ -175,7 +175,7 @@ def user_profile(request, username):
     return render(request, 'account/profile_account.html', {'profile_user': user})
 
 
-api_key = " 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"
+api_key = ""
 openAIDescription = "This is sql database with 3 tables, and the first table name is Item, "\
                     "the columns name are ItemID, Description,Picture,Category(two type 'Antiques' and 'Electronics')" \
                     "Cond(it contains two type Used and New), Starting_price, End_date,Start_date " \

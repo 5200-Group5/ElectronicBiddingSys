@@ -1,0 +1,50 @@
+/* navbar.css */
+
+/* General styling for the navbar header */
+.navbar-container .site-header {
+    background-color: rgba(0, 0, 0, .85);
+    backdrop-filter: saturate(180%) blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Container within the navbar for navigation items */
+.navbar-container .nav-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+
+/* Adjustments for medium devices and up */
+@media (min-width: 768px) {
+    .navbar-container .nav-container {
+        flex-direction: row;
+    }
+}
+
+/* Style for individual navbar items */
+.navbar-container .navbar-item {
+    padding: 0.5rem 0;
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .navbar-container .navbar-item {
+        display: inline-block;
+    }
+}
+
+/* Style for links within the navbar */
+.navbar-container a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.navbar-container a:hover {
+    color: #ddd;
+}
+
+/* Additional styling can be added here based on your specific requirements */
